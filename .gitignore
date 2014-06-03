@@ -1,0 +1,9 @@
+# Compiled files
+*.bin
+*.elf
+*.hex
+*.lss
+*.map
+*.sym
+*.o
+*.d
