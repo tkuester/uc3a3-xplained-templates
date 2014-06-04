@@ -32,7 +32,7 @@ Directory names have been truncated for sanity's sake.
 
 Project Layout
 --------------
-Put or symlink your projects in asf/avr32/applications
+**NOTE:** Put or symlink your projects in asf/avr32/applications
 
     project/
     project/board (If you spin your own board)
@@ -43,3 +43,11 @@ Programming the Board
     cd led-blink/xplained/gcc
     # (Here, jump reset to ground while holding SW0 down.)
     make -j8 dfu
+
+FAQ
+---
+Q: I'm getting this error from make:
+
+    No rule to make target `avr32/applications/led-blink/main.o', needed by `led-blink.elf'.
+
+A: Don't forget to symlink led-blink into avr32/applications. It's Atmel's annoying directory structure.
