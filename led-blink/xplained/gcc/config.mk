@@ -37,12 +37,8 @@ CSRCS = \
        avr32/boards/uc3_a3_xplained/init.c                \
        avr32/boards/uc3_a3_xplained/led.c                 \
        avr32/drivers/flashc/flashc.c                      \
-       avr32/drivers/gpio/gpio.c                          \
        avr32/drivers/intc/intc.c                          \
-       avr32/drivers/pdca/pdca.c                          \
-       avr32/drivers/pm/pm.c                              \
-       avr32/drivers/pm/pm_conf_clocks.c                  \
-       avr32/drivers/pm/power_clocks_lib.c                \
+       avr32/drivers/gpio/gpio.c                          \
        common/services/clock/uc3a3_a4/sysclk.c            \
 
 # List of assembler source files.
@@ -61,10 +57,7 @@ INC_PATH = \
        avr32/drivers/flashc                               \
        avr32/drivers/gpio                                 \
        avr32/drivers/intc                                 \
-       avr32/drivers/pdca                                 \
-       avr32/drivers/pm                                   \
        avr32/utils                                        \
-       avr32/utils/debug                                  \
        avr32/utils/preprocessor                           \
        common/boards                                      \
        common/services/clock                              \

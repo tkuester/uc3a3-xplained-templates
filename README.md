@@ -23,6 +23,7 @@ Dev Environment Setup
 Dev Environment Layout
 ----------------------
 Directory names have been truncated for sanity's sake.
+
     ~/atmel
     ~/atmel/asf-3.17.0 (Atmel's "drivers" here)
     ~/atmel/atmel-headers
@@ -40,5 +41,5 @@ Put or symlink your projects in asf/avr32/applications
 Programming the Board
 ---------------------
     cd led-blink/xplained/gcc
-    \# (Here, jump reset to ground while holding SW0 down.)
+    # (Here, jump reset to ground while holding SW0 down.)
     make -j8 dfu
