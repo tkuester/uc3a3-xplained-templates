@@ -5,6 +5,8 @@ Wasted **way** too much time getting Atmel's stuff up and running. There's an SD
 
 Everything here assumes your IDE is a plain ol' text editor, and you do your building with Make/GCC. I can't help you with IAR.
 
+Atmel's ASF is very rigid and a pain in the butt for path structure. There's not a pretty way to setup your environment. If you can think of a simple, non-complicated way to improve this, please let me know.
+
 Dev Environment Setup
 ---------------------
 * Get the board [here](http://www.digikey.com/product-detail/en/AT32UC3A3-XPLD/AT32UC3A3-XPLD-ND/2522717) for about $32.
@@ -12,10 +14,10 @@ Dev Environment Setup
 * Download the avr32 toolchain and header files for linux [here](http://www.atmel.com/tools/atmelavrtoolchainforlinux.aspx)
 * Download the ASF [here](http://www.atmel.com/tools/avrsoftwareframework.aspx)
 * Extract all three downloads to ~/atmel or /opt
-* Symlink or move the headers into the toolchain
-* Add the avr32 toolchain to your path
-* Install dfu-programmer (Ubuntu 12.04 has this in their repos)
-* Add an entry in udev for the uc3a3 board, so you don't need to run sudo
+* Symlink or move the headers into the toolchain (see below)
+* Add the avr32 toolchain to your path with setup\_env.sh
+* Install [dfu-programmer](http://dfu-programmer.sourceforge.net/) (Ubuntu 12.04 has this in their repos)
+* Add an entry in udev for the uc3a3 board so you don't need to run sudo. Restart udev
 
 Dev Environment Layout
 ----------------------
@@ -28,7 +30,7 @@ Directory names have been truncated for sanity's sake.
 
 Project Layout
 --------------
-Put / symlink your projects in asf/avr32/applications
+Put or symlink your projects in asf/avr32/applications
     project/
     project/board (If you spin your own board)
     project/board/gcc (Run "make dfu" here)
