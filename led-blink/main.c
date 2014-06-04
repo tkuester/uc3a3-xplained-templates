@@ -1,6 +1,4 @@
-#include <board.h>
-#include <delay.h>
-#include <led.h>
+#include <asf.h>
 
 int main(void)
 {

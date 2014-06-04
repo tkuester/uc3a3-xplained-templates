@@ -71,3 +71,5 @@ dfu: all
 	dfu-programmer at32uc3a3256 erase
 	dfu-programmer at32uc3a3256 flash --suppress-bootloader-mem $(PROJ_NAME).hex
 	dfu-programmer at32uc3a3256 reset
+	# Sometimes this must be run twice... not sure why
+	dfu-programmer at32uc3a3256 reset

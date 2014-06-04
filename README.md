@@ -11,6 +11,7 @@ Dev Environment Setup
 ---------------------
 * Get the board [here](http://www.digikey.com/product-detail/en/AT32UC3A3-XPLD/AT32UC3A3-XPLD-ND/2522717) for about $32.
 * Make an account with atmel so you can download their super secret files
+* Download the dev board [documentation](http://www.atmel.com/Images/doc32159.pdf)
 * Download the avr32 toolchain and header files for linux [here](http://www.atmel.com/tools/atmelavrtoolchainforlinux.aspx)
 * Download the ASF [here](http://www.atmel.com/tools/avrsoftwareframework.aspx)
 * Extract all three downloads to ~/atmel or /opt
@@ -31,12 +32,13 @@ Directory names have been truncated for sanity's sake.
 Project Layout
 --------------
 Put or symlink your projects in asf/avr32/applications
+
     project/
     project/board (If you spin your own board)
     project/board/gcc (Run "make dfu" here)
 
 Programming the Board
 ---------------------
-cd led-blink/xplained/gcc
-# Here, jump reset to ground while holding SW0 down.
-make -j8 dfu
+    cd led-blink/xplained/gcc
+    \# (Here, jump reset to ground while holding SW0 down.)
+    make -j8 dfu

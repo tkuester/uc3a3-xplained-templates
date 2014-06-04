@@ -54,6 +54,7 @@ ASSRCS = \
 # List of include paths.
 INC_PATH = \
        $(PROJ_ROOT)/$(BOARD_NAME)                         \
+       $(PROJ_ROOT)/$(BOARD_NAME)/gcc                     \
        avr32/boards                                       \
        avr32/boards/uc3_a3_xplained                       \
        avr32/drivers/cpu/cycle_counter                    \
