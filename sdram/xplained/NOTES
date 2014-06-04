@@ -1,0 +1,8 @@
+So. Somewhere there's defined SDRAM_PART_HEADER, and sdramc.h tries to include
+that file.
+
+Initially, I undefined that value from the uc3 board (since it's WRONG and
+uses the 16M16 instead of the 4M16...). That works until you try to compile
+sdramc.c, which doesn't allow us to undefine the part header.
+
+The only thing I could figure out was to use USER_BOARD, so there you have it.
