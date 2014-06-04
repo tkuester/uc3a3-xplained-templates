@@ -4,7 +4,7 @@
 
 #include "util.h"
 
-// Hacked from 
+// Hacked from Atmel's sdram example
 
 #define LED_SDRAM_WRITE     LED0
 #define LED_SDRAM_READ      LED0
