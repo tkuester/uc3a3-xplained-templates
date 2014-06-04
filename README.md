@@ -32,3 +32,9 @@ Put / symlink your projects in asf/avr32/applications
     project/
     project/board (If you spin your own board)
     project/board/gcc (Run "make dfu" here)
+
+Programming the Board
+---------------------
+cd led-blink/xplained/gcc
+# Here, jump reset to ground while holding SW0 down.
+make -j8 dfu
