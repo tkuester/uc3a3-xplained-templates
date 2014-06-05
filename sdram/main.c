@@ -19,6 +19,13 @@ int main(void)
     printf("PBA: %lu Hz\n", sysclk_get_pba_hz());
     printf("PBB: %lu Hz\n", sysclk_get_pbb_hz());
 
+    // SDRAM comes from sdramc.h, and points to the start of the
+    // external memory. You can make a uint32 pointer to it, and
+    // access it like an array up to SDRAM_SIZE.
+    //
+    // You can still use malloc() in this example, but it gets
+    // put inside the internal ram. See sdram-malloc if you want
+    // to move the heap to SDRAM
     memcheck();
     hexdump("sdram", SDRAM, 256);
 
