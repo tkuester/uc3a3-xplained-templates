@@ -79,6 +79,38 @@ _stext:
   // Enable the exception processing.
   csrf    AVR32_SR_EM_OFFSET
 
+  // Copied from AVR-32733 crt0.S
+  // Call the startup customization function.
+  call    _init_startup
+  
+  // Load initialized external SDRAM data having a global lifetime from the
+  // data_sdram LMA.
+  lda.w   r0, _data_sdram
+  lda.w   r1, _edata_sdram
+  cp      r0, r1
+  brhs    idata_sdram_load_loop_end
+  lda.w   r2, _data_sdram_lma
+idata_sdram_load_loop:
+  ld.d    r4, r2++
+  st.d    r0++, r4
+  cp      r0, r1
+  brlo    idata_sdram_load_loop
+idata_sdram_load_loop_end:
+
+  // Clear uninitialized external SDRAM data having a global lifetime in the
+  // blank static storage section.
+  lda.w   r0, __bss_sdram_start
+  lda.w   r1, _bss_sdram_end
+  cp      r0, r1
+  brhs    udata_sdram_clear_loop_end
+  mov     r2, 0
+  mov     r3, 0
+udata_sdram_clear_loop:
+  st.d    r0++, r2
+  cp      r0, r1
+  brlo    udata_sdram_clear_loop
+udata_sdram_clear_loop_end:
+
   // Load initialized data having a global lifetime from the data LMA.
   lda.w   r0, _data
   lda.w   r1, _edata

@@ -1,5 +1,6 @@
 /******************************************************************************
- * AVR32 AT32UC3A3256 GNU LD script file.
+ * AVR32 AT32UC3A3256 GNU LD script file (special for heap and allocation in
+ * external SDRAM).
  *
  * - Compiler:           GNU GCC for AVR32
  * - Supported devices:  AVR32 AT32UC3A3256
@@ -9,47 +10,36 @@
  *
  ******************************************************************************/
 
-/**
- *
- * Copyright (c) 2009-2012 Atmel Corporation. All rights reserved.
- *
- * \asf_license_start
- *
- * \page License
+/* Copyright (c) 2009 Atmel Corporation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *
- * 1. Redistributions of source code must retain the above copyright notice,
- *    this list of conditions and the following disclaimer.
+ * 1. Redistributions of source code must retain the above copyright notice, this
+ * list of conditions and the following disclaimer.
  *
  * 2. Redistributions in binary form must reproduce the above copyright notice,
- *    this list of conditions and the following disclaimer in the documentation
- *    and/or other materials provided with the distribution.
+ * this list of conditions and the following disclaimer in the documentation
+ * and/or other materials provided with the distribution.
  *
  * 3. The name of Atmel may not be used to endorse or promote products derived
- *    from this software without specific prior written permission.
+ * from this software without specific prior written permission.
  *
- * 4. This software may only be redistributed and used in connection with an
- *    Atmel microcontroller product.
+ * 4. This software may only be redistributed and used in connection with an Atmel
+ * AVR product.
  *
- * THIS SOFTWARE IS PROVIDED BY ATMEL "AS IS" AND ANY EXPRESS OR IMPLIED
+ * THIS SOFTWARE IS PROVIDED BY ATMEL "AS IS" AND ANY EXPRESS OR IMPLIE
  * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
  * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT ARE
  * EXPRESSLY AND SPECIFICALLY DISCLAIMED. IN NO EVENT SHALL ATMEL BE LIABLE FOR
- * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
- * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
- * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
- * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGE.
+ * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE
  *
- * \asf_license_stop
- *
- */
-
-OUTPUT_FORMAT("elf32-avr32", "elf32-avr32", "elf32-avr32")
+ */OUTPUT_FORMAT("elf32-avr32", "elf32-avr32", "elf32-avr32")
 
 OUTPUT_ARCH(avr32:uc)
 
@@ -59,8 +49,9 @@ MEMORY
 {
   FLASH (rxai!w) : ORIGIN = 0x80000000, LENGTH = 0x00040000
   INTRAM (wxa!ri) : ORIGIN = 0x00000004, LENGTH = 0x0000FFFC
-  HRAM0 (wxa!ri) : ORIGIN = 0xFF000000, LENGTH = 0x00008000
-  HRAM1 (wxa!ri) : ORIGIN = 0xFF008000, LENGTH = 0x00008000
+  ERAM0 (wxa!ri) : ORIGIN = 0xFF000000, LENGTH = 0x00008000
+  ERAM1 (wxa!ri) : ORIGIN = 0xFF008000, LENGTH = 0x00008000
+  SDRAM (wxa!ri) : ORIGIN = 0xD0000000, LENGTH = 0x02000000
   USERPAGE : ORIGIN = 0x80800000, LENGTH = 0x00000200
 }
 
@@ -70,21 +61,15 @@ PHDRS
   INTRAM_ALIGN PT_NULL;
   INTRAM_AT_FLASH PT_LOAD;
   INTRAM PT_NULL;
-  HRAM0_AT_FLASH PT_LOAD;
-  HRAM0 PT_NULL;
-  HRAM1_AT_FLASH PT_LOAD;
-  HRAM1 PT_NULL;
+  SDRAM_AT_FLASH PT_LOAD;
+  SDRAM PT_NULL;
   USERPAGE PT_LOAD;
 }
 
 SECTIONS
 {
-  /* If this heap size is selected, all the INTRAM space from the end of the
-     data area to the beginning of the stack will be allocated for the heap. */
-  __max_heap_size__ = -1;
-
   /* Use a default heap size if heap size was not defined. */
-  __heap_size__ = DEFINED(__heap_size__) ? __heap_size__ : __max_heap_size__;
+  __heap_size__ = DEFINED(__heap_size__) ? __heap_size__ : LENGTH(SDRAM);
 
   /* Use a default stack size if stack size was not defined. */
   __stack_size__ = DEFINED(__stack_size__) ? __stack_size__ : 4K;
@@ -92,7 +77,7 @@ SECTIONS
   /* Read-only sections, merged into text segment: */
   PROVIDE (__executable_start = 0x80000000); . = 0x80000000;
   .interp         : { *(.interp) } >FLASH AT>FLASH :FLASH
-  .reset : {  KEEP (*(.reset)) } >FLASH AT>FLASH :FLASH
+  .reset : {  *(.reset) } >FLASH AT>FLASH :FLASH
   .hash           : { *(.hash) } >FLASH AT>FLASH :FLASH
   .dynsym         : { *(.dynsym) } >FLASH AT>FLASH :FLASH
   .dynstr         : { *(.dynstr) } >FLASH AT>FLASH :FLASH
@@ -227,15 +212,6 @@ SECTIONS
   . = ALIGN(8);
   _end = .;
   PROVIDE (end = .);
-  __heap_start__ = ALIGN(8);
-  .heap           :
-  {
-    *(.heap)
-    . = (__heap_size__ == __max_heap_size__) ?
-        ORIGIN(INTRAM) + LENGTH(INTRAM) - __stack_size__ - ABSOLUTE(.) :
-        __heap_size__;
-  } >INTRAM AT>INTRAM :INTRAM
-  __heap_end__ = .;
   /* Stabs debugging sections.  */
   .stab          0 : { *(.stab) }
   .stabstr       0 : { *(.stabstr) }
@@ -277,43 +253,33 @@ SECTIONS
     _estack = .;
   } >INTRAM AT>INTRAM :INTRAM
 
-  . = ORIGIN(HRAM0);
-  .data_hram0     ORIGIN(HRAM0) : AT ( LOADADDR(.balign) + SIZEOF (.balign) )
+  . = ORIGIN(SDRAM);
+  .data_sdram     ORIGIN(SDRAM) : AT ( LOADADDR(.balign) + SIZEOF (.balign) )
   {
-    PROVIDE(_data_hram0 = .);
-    *(.data_hram0)
+    PROVIDE(_data_sdram = .);
+    *(.data_sdram)
     . = ALIGN(8);
-    PROVIDE(_edata_hram0 = .);
-  } >HRAM0 :HRAM0_AT_FLASH
+    PROVIDE(_edata_sdram = .);
+  } >SDRAM :SDRAM_AT_FLASH
 
-  PROVIDE(_data_hram0_lma = ABSOLUTE(LOADADDR(.data_hram0)));
+  PROVIDE(_data_sdram_lma = ABSOLUTE(LOADADDR(.data_sdram)));
 
   . = ALIGN(8);
-  .bss_hram0 :
+  .bss_sdram :
   {
-    PROVIDE(__bss_hram0_start = .);
-    *(.bss_hram0)
-    PROVIDE(_bss_hram0_end = .);
-  } >HRAM0 AT>HRAM0 :HRAM0
+    PROVIDE(__bss_sdram_start = .);
+    *(.bss_sdram)
+    PROVIDE(_bss_sdram_end = .);
+  } >SDRAM AT>SDRAM :SDRAM
 
-  . = ORIGIN(HRAM1);
-  .data_hram1     ORIGIN(HRAM1) : AT ( LOADADDR(.balign) + SIZEOF (.balign) )
+  .heap :
   {
-    PROVIDE(_data_hram1 = .);
-    *(.data_hram1)
-    . = ALIGN(8);
-    PROVIDE(_edata_hram1 = .);
-  } >HRAM1 :HRAM1_AT_FLASH
+    __heap_start__ = .;
+    *(.heap)
+    . = __heap_size__;
+    __heap_end__ = .;
+  } >SDRAM AT>SDRAM :SDRAM
 
-  PROVIDE(_data_hram1_lma = ABSOLUTE(LOADADDR(.data_hram1)));
-
-  . = ALIGN(8);
-  .bss_hram1 :
-  {
-    PROVIDE(__bss_hram1_start = .);
-    *(.bss_hram1)
-    PROVIDE(_bss_hram1_end = .);
-  } >HRAM1 AT>HRAM1 :HRAM1
   .userpage       : { *(.userpage .userpage.*) } >USERPAGE AT>USERPAGE :USERPAGE
   /DISCARD/ : { *(.note.GNU-stack) }
 }

@@ -117,7 +117,7 @@ CPPFLAGS = \
 
 # Extra flags to use when linking
 LDFLAGS = \
-       -nostartfiles -Wl,-e,_trampoline
+       -nostartfiles -Wl,-e,_trampoline -nostartfiles
 
 # Pre- and post-build commands
 PREBUILD_CMD = 
