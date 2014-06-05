@@ -51,7 +51,7 @@ CSRCS = \
 # List of assembler source files.
 ASSRCS = \
        avr32/drivers/intc/exception.S                     \
-       avr32/utils/startup/startup_uc3.S                  \
+       $(PROJ_ROOT)/lowlevel/startup_uc3.S                \
        avr32/utils/startup/trampoline_uc3.S
 
 # List of include paths.
@@ -84,7 +84,7 @@ LIB_PATH =
 LIBS =
 
 # Path relative to top level directory pointing to a linker script.
-LINKER_SCRIPT = avr32/utils/linker_scripts/at32uc3a3/256/gcc/link_uc3a3256.lds
+LINKER_SCRIPT = $(PROJ_ROOT)/$(BOARD_NAME)/gcc/link_uc3a3256.lds
 
 # Additional options for debugging. By default the common Makefile.in will
 # add -g3.
