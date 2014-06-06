@@ -145,7 +145,7 @@ int _init_startup(void)
 	#endif
 
 	/* Code section present if and only if the debug trace is activated. */
-	#if configDBG
+	#if 0 //configDBG
 	{
 		static const gpio_map_t DBG_USART_GPIO_MAP =
 		{
