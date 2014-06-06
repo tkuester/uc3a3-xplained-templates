@@ -27,7 +27,10 @@ static void malloc_task(void *params __attribute__((unused)))
     printf("Task Variable:   %p\n", &data);
     printf("Heap Data:       %p\n", data);
 
-    vPortFree(data);
+    if(data != NULL) {
+        vPortFree(data);
+    }
+
     vTaskDelete(NULL);
 }
 
