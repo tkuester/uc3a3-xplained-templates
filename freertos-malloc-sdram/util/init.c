@@ -3,44 +3,6 @@
 #include "util.h"
 #include "conf_usart_serial.h"
 
-/*
-int _init_startup(void);
-int _init_startup(void)
-{
-	// Import the Exception Vector Base Address.
-	// Load the Exception Vector Base Address in the corresponding system register
-	extern void _evba;
-	Set_system_register(AVR32_EVBA, (int)&_evba);
-
-    // As much as I'd like to printf in here, it doesn't seem to like this.
-    // Ideally, stdio would be initilized, so main would LITERALLY be just
-    // main, with no weird vendor code. If anyone can figure this out,
-    // let me know.
-
-    board_init();
-    sysclk_init();
-    //serial_init();
-	sdramc_init(sysclk_get_hsb_hz());
-
-	// Enable exceptions.
-	// Initialize interrupt handling.
-	Enable_global_exception();
-	INTC_init_interrupts();
-
-    
-    // if(memcheck() > 0) {
-    //     hexdump("sdram", SDRAM, 256);
-    //     while(1) {
-    //         LED_Toggle(LED0);
-    //         delay_ms(1500);
-    //     }
-    // }
-
-	// GCC: Don't-care value.
-	return 1;
-}
-*/
-
 void serial_init(void)
 {
 	// This is a fairly stereotypical "ASF pattern" for enabling a peripheral.

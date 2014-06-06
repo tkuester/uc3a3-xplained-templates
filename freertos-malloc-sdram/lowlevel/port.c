@@ -70,7 +70,7 @@
 
 /* AVR32 UC3 includes. */
 #include <avr32/io.h>
-#include <gpio.h>
+#include <asf.h>
 
 #if configDBG
 	#include <usart.h>
@@ -123,6 +123,10 @@ int _init_startup(void)
 
 	/* Load the Exception Vector Base Address in the corresponding system register. */
 	Set_system_register( AVR32_EVBA, ( int ) &_evba );
+
+    board_init();
+    sysclk_init();
+    sdramc_init(sysclk_get_hsb_hz());
 
 	/* Enable exceptions. */
 	ENABLE_ALL_EXCEPTIONS();
