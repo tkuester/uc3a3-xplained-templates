@@ -64,16 +64,10 @@
 #define configUSE_PREEMPTION      1
 #define configUSE_IDLE_HOOK       0
 #define configUSE_TICK_HOOK       0
-#if (BOARD == UC3L_EK)
-	#define EXAMPLE_TARGET_MCUCLK_FREQ_HZ   12000000  // MCU clock target frequency, in Hz
-	#define EXAMPLE_TARGET_PBACLK_FREQ_HZ   12000000  // PBA clock target frequency, in Hz
-
-	#define configCPU_CLOCK_HZ        ( EXAMPLE_TARGET_MCUCLK_FREQ_HZ ) /* Hz clk gen */
-	#define configPBA_CLOCK_HZ        ( EXAMPLE_TARGET_PBACLK_FREQ_HZ )
-#else
-	#define configCPU_CLOCK_HZ        ( FOSC0 ) /* Hz clk gen */
-	#define configPBA_CLOCK_HZ        ( FOSC0 )
-#endif
+// A better way to define this would be sysclk_get_cpu/pba_hz(),
+// but I'm not sure if that works yet.
+#define configCPU_CLOCK_HZ        ( 66000000 ) /* Hz clk gen */
+#define configPBA_CLOCK_HZ        ( 66000000 )
 #define configTICK_RATE_HZ        ( ( portTickType ) 1000 )
 #define configMAX_PRIORITIES      ( ( unsigned portBASE_TYPE ) 8 )
 #define configMINIMAL_STACK_SIZE  ( ( unsigned portSHORT ) 256 )
