@@ -12,8 +12,8 @@ Dev Environment Setup
 * Get the board [here](http://www.digikey.com/product-detail/en/AT32UC3A3-XPLD/AT32UC3A3-XPLD-ND/2522717) for about $32.
 * Make an account with atmel so you can download their super secret files
 * Download the dev board [documentation](http://www.atmel.com/Images/doc32159.pdf)
-* Download the avr32 toolchain and header files for linux [here](http://www.atmel.com/tools/atmelavrtoolchainforlinux.aspx)
-* Download the ASF [here](http://www.atmel.com/tools/avrsoftwareframework.aspx)
+* Download the avr32 toolchain and header files for linux [here](http://www.microchip.com/avr-support/avr-and-sam-downloads-archive)
+* Download the ASF [here](http://www.microchip.com/avr-support/avr-and-sam-downloads-archive)
 * Extract all three downloads to ~/atmel or /opt
 * Symlink or move the headers into the toolchain (see below)
 * Add the avr32 toolchain to your path by sourcing setup\_env.sh in your ~/.bashrc
